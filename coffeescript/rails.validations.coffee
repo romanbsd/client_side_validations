@@ -58,7 +58,10 @@ validateForm = (form, validators) ->
   valid
 
 validateElement = (element, validators) ->
-  element.trigger('element:validate:before.ClientSideValidations')
+  beforeEvent = $.Event('element:validate:before.ClientSideValidations')
+  element.trigger(beforeEvent)
+  # If the event handler stops propagation, then don't perform validation
+  return true if beforeEvent.isPropagationStopped()
 
   passElement = ->
     element.trigger('element:validate:pass.ClientSideValidations').data('valid', null)
